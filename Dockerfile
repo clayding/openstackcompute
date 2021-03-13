@@ -21,9 +21,26 @@ RUN yum install -y openstack-neutron-linuxbridge ebtables ipset
 # Override configuration files
 COPY conf/nova/nova.conf /etc/nova/nova.conf
 COPY conf/neutron/neutron.conf /etc/neutron/neutron.conf
+COPY conf/neutron/plugins/ml2/linuxbridge_agent.ini /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+
+# Change the permisson of duplicated files
+RUN chmod 640 /etc/nova/nova.conf
+RUN chown root:nova /etc/nova/nova.conf
+RUN chmod 640 /etc/neutron/neutron.conf
+RUN chmod 640 /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
 RUN echo "/proc/sys/net/bridge/bridge-nf-call-iptables value:" > /tmp/openstackcompute.log
 RUN cat /proc/sys/net/bridge/bridge-nf-call-iptables >> /tmp/openstackcompute.log
 
 RUN echo "/proc/sys/net/bridge/bridge-nf-call-ip6tables value:" >> /tmp/openstackcompute.log
 RUN cat /proc/sys/net/bridge/bridge-nf-call-ip6tables >> /tmp/openstackcompute.log
+
+# Enable and start nova services on compute node
+RUN systemctl enable libvirtd.service openstack-nova-compute.service
+# Not run here
+#RUN systemctl start libvirtd.service openstack-nova-compute.service
+
+# Enable and start neutron services on compute node
+RUN systemctl enable neutron-linuxbridge-agent.service
+# Not run here
+#RUN systemctl start neutron-linuxbridge-agent.service
