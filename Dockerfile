@@ -1,21 +1,19 @@
-#FROM centos:7
-#FROM gar-registry.caas.intel.com/duckerdev/openstackcompute:v1.0.0
-FROM clayding/openstackcompute:v1.0.1
+FROM centos:7
 LABEL maintainer=shikun.ding@intel.com
 
-# update os and add required bundles
-#RUN yum -y update \
-#        && yum install -y python3-pip make gcc gcc-c++ \
-#         glib2 gtk2 git curl wget iproute2 iproute2-doc net-tools \
-#         sudo pciutils
+# Update os and add required bundles
+RUN yum -y update \
+        && yum install -y python3-pip make gcc gcc-c++ \
+         glib2 gtk2 git curl wget iproute2 iproute2-doc net-tools \
+         sudo pciutils
 
-#RUN yum clean all && yum makecache && yum -y update && \
-#        yum install -y sudo iproute2 iproute2-doc net-tools file
+RUN yum clean all && yum makecache && yum -y update && \
+        yum install -y sudo iproute2 iproute2-doc net-tools file
 
 
 # Install the packages
-#RUN yum install -y centos-release-openstack-train
-#RUN yum install -y openstack-nova-compute
+RUN yum install -y centos-release-openstack-train
+RUN yum install -y openstack-nova-compute
 RUN yum install -y openstack-neutron-linuxbridge ebtables ipset
 
 # Override configuration files
@@ -44,3 +42,7 @@ RUN systemctl enable libvirtd.service openstack-nova-compute.service
 RUN systemctl enable neutron-linuxbridge-agent.service
 # Not run here
 #RUN systemctl start neutron-linuxbridge-agent.service
+
+# Added startup script
+COPY scripts/* /usr/bin/
+RUN chmod +x /usr/bin/openstack*

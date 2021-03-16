@@ -25,6 +25,9 @@ controlip=$3
 computeip=$4
 provideif=$5
 
-docker run --privileged=true --network host --rm -h ${host_name} -it ${imagename} \
-	-e CONTROLLER_IP=$controlip -e COMPUTE_IP=$computeip -e PROVIDER_INTERFACE=$provideif \
-	/usr/sbin/init
+runcmd="docker run --privileged=true --network host --rm -h ${host_name} \
+-e CONTROLLER_IP="$controlip" -e COMPUTE_IP=$computeip -e PROVIDER_INTERFACE=$provideif \
+-it ${imagename} /usr/sbin/init"
+
+echo "Command: $runcmd"
+$runcmd
