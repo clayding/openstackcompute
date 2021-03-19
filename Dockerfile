@@ -25,7 +25,9 @@ COPY conf/neutron/plugins/ml2/linuxbridge_agent.ini /etc/neutron/plugins/ml2/lin
 RUN chmod 640 /etc/nova/nova.conf
 RUN chown root:nova /etc/nova/nova.conf
 RUN chmod 640 /etc/neutron/neutron.conf
+RUN chown root:neutron /etc/neutron/neutron.conf
 RUN chmod 640 /etc/neutron/plugins/ml2/linuxbridge_agent.ini
+RUN chown root:neutron /etc/neutron/plugins/ml2/linuxbridge_agent.ini
 
 RUN echo "/proc/sys/net/bridge/bridge-nf-call-iptables value:" > /tmp/openstackcompute.log
 RUN cat /proc/sys/net/bridge/bridge-nf-call-iptables >> /tmp/openstackcompute.log
