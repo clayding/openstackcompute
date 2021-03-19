@@ -27,6 +27,7 @@ provideif=$5
 
 runcmd="docker run --privileged=true --network host --rm -h ${host_name} \
 -e CONTROLLER_IP="$controlip" -e COMPUTE_IP=$computeip -e PROVIDER_INTERFACE=$provideif \
+-v /lib/modules:/lib/modules \
 -it ${imagename} /usr/sbin/init"
 
 echo "Command: $runcmd"
